@@ -25,7 +25,7 @@ public class User implements Serializable {
     private String lastName;
 
     @Id
-    @TableGenerator(name = "userIdGenerator")
+    @TableGenerator(name = "userIdGenerator", initialValue = 100)
     @GeneratedValue(generator = "userIdGenerator", strategy = GenerationType.TABLE)
     public long getId() {
         return id;

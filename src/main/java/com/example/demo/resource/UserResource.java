@@ -1,9 +1,5 @@
 package com.example.demo.resource;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,23 +40,7 @@ public class UserResource {
     
     @GetMapping(produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public Page<User> getUsers(Pageable pageable) {
-        Sort sort = pageable.getSort();
-        PageRequest pageRequest = null;
-        if (null != sort) {
-            List<Sort.Order> orders = new ArrayList<>();
-            for (Sort.Order order : sort) {
-                orders.add(order);
-            }
-            Optional<Order> firstOrder = orders.stream().findFirst();
-            if (firstOrder.isPresent()) {
-                Order order = firstOrder.get();
-                Order nullsLast = order.nullsLast();
-//                pageable.getSort().and(new Sort(nullsLast));
-                pageRequest = new PageRequest(pageable.getPageNumber(), pageable.getPageSize(), new Sort(nullsLast));
-            }
-        } else {
-            pageRequest = new PageRequest(pageable.getPageNumber(), pageable.getPageSize());
-        }
+        PageRequest pageRequest = new PageRequest(pageable.getPageNumber(), pageable.getPageSize(), new Sort(new Order(Sort.Direction.ASC, "firstName", Sort.NullHandling.NULLS_LAST)));
         return userService.getUsers(pageRequest);
     }
 
